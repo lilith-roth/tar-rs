@@ -896,6 +896,8 @@ fn append_dir_all(
             {
                 let stat = fs::metadata(&src)?;
                 if !stat.is_file() {
+                    use ::std::os::unix::fs::FileTypeExt;
+                    if stat.file_type().is_socket() {continue;}
                     append_special(dst, &dest, &stat, options.mode)?;
                     continue;
                 }
