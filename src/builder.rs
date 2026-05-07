@@ -1,6 +1,7 @@
 use std::fs;
 use std::io;
 use std::io::prelude::*;
+use std::os::unix::fs::FileTypeExt;
 use std::path::Path;
 use std::str;
 
@@ -952,8 +953,7 @@ fn append_dir_all(
             {
                 let stat = fs::metadata(&src)?;
                 if !stat.is_file() {
-                    use ::std::os::unix::fs::FileTypeExt;
-                    if stat.file_type().is_socket() {continue;}
+                    if stat.file_type().is_socket() { continue; }
                     append_special(dst, &dest, &stat, options.mode, options.preserve_absolute)?;
                     continue;
                 }
